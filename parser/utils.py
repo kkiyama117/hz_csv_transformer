@@ -15,7 +15,6 @@ def parse_block(stream: Iterator, data_info: BlockData):
         return stream, None
     else:
         result = {}
-        print(data_list)
         for _d in data_list:
             row: list = next(stream)
             _data = _parse_row_data_from_rowdata(row, _d)

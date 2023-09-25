@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class FileInfo:
     koumoku: int
     kind: str
+    title: str
     version: int
     sector: int
 
