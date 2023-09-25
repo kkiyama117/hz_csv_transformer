@@ -1,10 +1,6 @@
 from dataclasses import dataclass
 
 
-class DataCsv:
-    pass
-
-
 @dataclass
 class FileInfo:
     koumoku: int

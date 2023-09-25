@@ -1,6 +1,6 @@
 # これはサンプルの Python スクリプトです。
 import csv
-from parser import *
+from parser import parse_file_info, parse_messing_info
 
 
 def open_csv_sjis(filename):
