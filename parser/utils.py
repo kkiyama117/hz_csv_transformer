@@ -10,16 +10,14 @@ def parse_block(stream: Iterator, data_info: BlockData):
     title = data_info.title
     data_list: List[RowData] = data_info.rows
     # pass
-    first_row: list = next(stream)
-    if first_row[data_info.start - 1] != title:
-        return stream, None
-    else:
-        result = {}
-        for _d in data_list:
-            row: list = next(stream)
-            _data = _parse_row_data_from_rowdata(row, _d)
-            result[_d.title] = _data
-        return stream, result
+    while next(stream)[data_info.start - 1] != title:
+        pass
+    result = {}
+    for _d in data_list:
+        row: list = next(stream)
+        _data = _parse_row_data_from_rowdata(row, _d)
+        result[_d.title] = _data
+    return stream, result
 
 
 def _parse_row_data_from_rowdata(row: List[str], rowdata: RowData):

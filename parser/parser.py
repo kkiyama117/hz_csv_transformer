@@ -45,19 +45,18 @@ def parse_messing_info(stream: Iterator):
 
 def parse_condition_info(stream: Iterator):
     base = {}
-    first_row: list = next(stream)
-    if first_row[0] != "《測定条件》":
-        return stream, None
-    else:
-        stream, result = _parse_honsokutei(stream)
-        base["main_measure"] = result
-        stream, result = _parse_sizendeni(stream)
-        base["nature_potential"] = result
-        stream, result = _parse_syokideni(stream)
-        base["first_potential"] = result
-        stream, result = _parse_atosyori(stream)
-        base["post_process"] = result
-        return stream, ConditionInfo(**base)
+    title = "《測定条件》"
+    while next(stream)[0] != title:
+        pass
+    stream, result = _parse_honsokutei(stream)
+    base["main_measure"] = result
+    stream, result = _parse_sizendeni(stream)
+    base["nature_potential"] = result
+    stream, result = _parse_syokideni(stream)
+    base["first_potential"] = result
+    stream, result = _parse_atosyori(stream)
+    base["post_process"] = result
+    return stream, ConditionInfo(**base)
 
 
 def _parse_honsokutei(stream):
@@ -119,3 +118,29 @@ def _parse_atosyori(stream):
     )
     stream, result = parse_block(stream, _data)
     return stream, PostProcessingCondition(**result)
+
+
+def parse_pgs(stream):
+    first_row: list = next(stream)
+    if first_row[0] != "《PGS設定》":
+        return stream, None
+    else:
+        _data = BlockData(
+            title="[本測定]",
+            start=2,
+            rows=[
+                RowData("operating_mode", "動作モード", start=3, count=2),
+                RowData("internal_setting", "内部設定有効選択", start=3),
+                RowData("internal_voltage", "内部設定電圧", start=3),
+                RowData("internal_currency", "内部設定電流", start=3),
+                RowData("external_connection", "外部入力の接続", start=3),
+                RowData("voltage_range", "電圧レンジ", start=3),
+                RowData("current_range", "電流レンジ", start=3),
+                RowData("minimum_current_range", "電流下限レンジ", start=3),
+                RowData("current_limit", "電流リミット", start=3),
+                RowData("filter", "フィルタ", start=3),
+                RowData("response", "レスポンス", start=3),
+            ]
+        )
+        stream, result = parse_block(stream, _data)
+        return stream, PostProcessingCondition(**result)

@@ -1,6 +1,6 @@
 # これはサンプルの Python スクリプトです。
 import csv
-from parser import parse_file_info, parse_messing_info, parse_condition_info
+from parser import parse_file_info, parse_messing_info, parse_condition_info, parse_pgs
 
 
 def open_csv_sjis(filename):
@@ -11,14 +11,12 @@ def open_csv_sjis(filename):
         )
         stream, file_info = parse_file_info(csv_reader)
         print(file_info)
-        # 一行skip
-        next(stream)
         stream, measure_info = parse_messing_info(csv_reader)
         print(measure_info)
-        next(stream)
         stream, condition_info = parse_condition_info(csv_reader)
         print(condition_info)
-        print(next(stream))
+        stream, condition_info = parse_pgs(csv_reader)
+        print(condition_info)
 
 
 def open_csv(filename):
