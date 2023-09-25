@@ -40,3 +40,23 @@ def parse_messing_info(stream: Iterator):
     )
     stream, result = parse_block(stream, _data)
     return stream, MeasureInfo(**result)
+
+
+def parse_condition(stream):
+    return stream, None
+
+
+def _parse_honsokutei(stream):
+    return stream, None
+
+
+def _parse_sizendeni(stream):
+    return stream, None
+
+
+def _parse_syokideni(stream):
+    return stream, None
+
+
+def _parse_atosyori(stream):
+    return stream, None

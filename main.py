@@ -17,7 +17,6 @@ def open_csv_sjis(filename):
         next(stream)
         stream, measure_info = parse_messing_info(csv_reader)
         print(measure_info)
-        # 一行skip
         next(stream)
         print(next(stream))
 
