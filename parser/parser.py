@@ -1,7 +1,7 @@
 from typing import Iterator
 
 from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
-    PostProcessingCondition, NaturePotentialCondition
+    PostProcessingCondition, NaturePotentialCondition, PGSInfo
 from .models import RowData, BlockData
 from .utils import parse_row_data, parse_block
 
@@ -122,25 +122,25 @@ def _parse_atosyori(stream):
 
 def parse_pgs(stream):
     first_row: list = next(stream)
-    if first_row[0] != "《PGS設定》":
-        return stream, None
-    else:
-        _data = BlockData(
-            title="[本測定]",
-            start=2,
-            rows=[
-                RowData("operating_mode", "動作モード", start=3, count=2),
-                RowData("internal_setting", "内部設定有効選択", start=3),
-                RowData("internal_voltage", "内部設定電圧", start=3),
-                RowData("internal_currency", "内部設定電流", start=3),
-                RowData("external_connection", "外部入力の接続", start=3),
-                RowData("voltage_range", "電圧レンジ", start=3),
-                RowData("current_range", "電流レンジ", start=3),
-                RowData("minimum_current_range", "電流下限レンジ", start=3),
-                RowData("current_limit", "電流リミット", start=3),
-                RowData("filter", "フィルタ", start=3),
-                RowData("response", "レスポンス", start=3),
-            ]
-        )
-        stream, result = parse_block(stream, _data)
-        return stream, PostProcessingCondition(**result)
+    title = "《PGS設定》"
+    while next(stream)[0] != title:
+        pass
+    _data = BlockData(
+        title="[本測定]",
+        start=2,
+        rows=[
+            RowData("operating_mode", "動作モード", start=3, count=2),
+            RowData("internal_setting", "内部設定有効選択", start=3),
+            RowData("internal_voltage", "内部設定電圧", start=3),
+            RowData("internal_currency", "内部設定電流", start=3),
+            RowData("external_connection", "外部入力の接続", start=3),
+            RowData("voltage_range", "電圧レンジ", start=3),
+            RowData("current_range", "電流レンジ", start=3),
+            RowData("minimum_current_range", "電流下限レンジ", start=3),
+            RowData("current_limit", "電流リミット", start=3),
+            RowData("filter", "フィルタ", start=3),
+            RowData("response", "レスポンス", start=3),
+        ]
+    )
+    stream, result = parse_block(stream, _data)
+    return stream, PGSInfo(**result)
