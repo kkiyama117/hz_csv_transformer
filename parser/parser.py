@@ -1,6 +1,7 @@
 from typing import Iterator
 
-from models.csv_structure import FileInfo, MeasureInfo
+from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
+    PostProcessingCondition, NaturePotentialCondition
 from .models import RowData, BlockData
 from .utils import parse_row_data, parse_block
 
@@ -42,21 +43,79 @@ def parse_messing_info(stream: Iterator):
     return stream, MeasureInfo(**result)
 
 
-def parse_condition(stream):
-    return stream, None
+def parse_condition_info(stream: Iterator):
+    base = {}
+    first_row: list = next(stream)
+    if first_row[0] != "《測定条件》":
+        return stream, None
+    else:
+        stream, result = _parse_honsokutei(stream)
+        base["main_measure"] = result
+        stream, result = _parse_sizendeni(stream)
+        base["nature_potential"] = result
+        stream, result = _parse_syokideni(stream)
+        base["first_potential"] = result
+        stream, result = _parse_atosyori(stream)
+        base["post_process"] = result
+        return stream, ConditionInfo(**base)
 
 
 def _parse_honsokutei(stream):
-    return stream, None
+    _data = BlockData(
+        title="[本測定]",
+        start=2,
+        rows=[
+            RowData("first_potential", "第1設定電位", start=3),
+            RowData("second_potential", "第2設定電位", start=3),
+            RowData("scan_rate", "ｽｷｬﾝ速度", start=3),
+            RowData("cycles", "ｻｲｸﾙ数", start=3),
+            RowData("sampling_rate", "ｻﾝﾌﾟﾘﾝｸﾞ間隔", start=3),
+            RowData("upper_limit", "上限ﾘﾐｯﾄﾘﾊﾞｰｽ", start=3),
+            RowData("lower_limit", "下限ﾘﾐｯﾄﾘﾊﾞｰｽ", start=3),
+            RowData("dead_time", "不感時間", start=3),
+        ]
+    )
+    stream, result = parse_block(stream, _data)
+    return stream, MainMeasureCondition(**result)
 
 
 def _parse_sizendeni(stream):
-    return stream, None
+    _data = BlockData(
+        title="[自然電位]",
+        start=2,
+        rows=[
+            RowData("measurement_time", "計測打切時間", start=3),
+            RowData("detected_variation", "検出電位変動", start=3),
+            RowData("interval", "ｻﾝﾌﾟﾘﾝｸﾞ間隔", start=3),
+        ]
+    )
+    stream, result = parse_block(stream, _data)
+    return stream, NaturePotentialCondition(**result)
 
 
 def _parse_syokideni(stream):
-    return stream, None
+    _data = BlockData(
+        title="[初期電位]",
+        start=2,
+        rows=[
+            RowData("initial", "初期電位", start=3),
+            RowData("holding_time", "初期電位保持時間", start=3),
+            RowData("interval", "ｻﾝﾌﾟﾘﾝｸﾞ間隔", start=3),
+        ]
+    )
+    stream, result = parse_block(stream, _data)
+    return stream, FirstPotentialCondition(**result)
 
 
 def _parse_atosyori(stream):
-    return stream, None
+    _data = BlockData(
+        title="[後処理]",
+        start=2,
+        rows=[
+            RowData("kind", "後処理", start=3, count=2),
+            RowData("holding_time", "保持時間", start=3),
+            RowData("interval", "ｻﾝﾌﾟﾘﾝｸﾞ間隔", start=3),
+        ]
+    )
+    stream, result = parse_block(stream, _data)
+    return stream, PostProcessingCondition(**result)

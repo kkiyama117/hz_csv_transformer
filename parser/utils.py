@@ -11,7 +11,7 @@ def parse_block(stream: Iterator, data_info: BlockData):
     data_list: List[RowData] = data_info.rows
     # pass
     first_row: list = next(stream)
-    if first_row[0] != title:
+    if first_row[data_info.start - 1] != title:
         return stream, None
     else:
         result = {}
@@ -27,7 +27,7 @@ def _parse_row_data_from_rowdata(row: List[str], rowdata: RowData):
 
 
 def parse_row_data(row, title, first, count):
-    if row[1] == title:
+    if row[first - 1] == title:
         if count == 1:
             return row[first]
         elif count > 1:

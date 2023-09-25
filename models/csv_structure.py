@@ -28,7 +28,7 @@ class MainMeasureCondition:
     second_potential: int
     # mV/s
     scan_rate: int
-    cicles: int
+    cycles: int
     # ms
     sampling_rate: int
     upper_limit: int | None
@@ -71,11 +71,3 @@ class ConditionInfo:
     nature_potential: NaturePotentialCondition
     first_potential: FirstPotentialCondition
     post_process: PostProcessingCondition
-    siryou: str
-    working_electrode: str
-    area: str
-    solution: str
-    concentration: str
-    reference_electrode: str
-    temperature: str
-    comment: str
