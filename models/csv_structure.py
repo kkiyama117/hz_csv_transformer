@@ -1,4 +1,18 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+import pickle
+
+
+def info_to_csv(info):
+    data_dict = asdict(info)
+    with open("test.pickle", mode="wb") as f:
+        pickle.dump(info, f)
+    pickle_to_info("")
+
+
+def pickle_to_info(name):
+    with open("test.pickle", mode="rb") as f:
+        res = pickle.load(f)
+    print(res)
 
 
 @dataclass
@@ -88,3 +102,11 @@ class PGSInfo:
     current_limit: str
     filter: str
     response: int
+
+
+@dataclass
+class AllInfo:
+    file: FileInfo
+    measure: MeasureInfo
+    condition: ConditionInfo
+    pgs: PGSInfo
