@@ -10,7 +10,8 @@ def parse_block_with_title(stream: Iterator, data_info: BlockData):
     title = data_info.title
     while next(stream)[data_info.start - 1] != title:
         pass
-    return parse_block(stream,data_info)
+    return parse_block(stream, data_info)
+
 
 def parse_block(stream: Iterator, data_info: BlockData):
     data_list: List[RowData] = data_info.rows
