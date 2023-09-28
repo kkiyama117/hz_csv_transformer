@@ -10,7 +10,8 @@ def slice_csv_sjis(filename):
             f, delimiter=",", skipinitialspace=True
         )
         for i in NextIterator(csv_reader):
-            info_to_csv(i)
+            # info_to_csv(i)
+            print(i)
         # stream, file_info = parse_file_info(csv_reader)
         # stream, measure_info = parse_messing_info(csv_reader)
         # stream, condition_info = parse_condition_info(csv_reader)

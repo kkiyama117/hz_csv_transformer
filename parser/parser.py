@@ -45,7 +45,7 @@ def parse_file_info(stream: Iterator):
         ]
     )
     stream, result = parse_block(stream, _data)
-    if result.get("koumoku") == 1283:
+    if int(result.get("koumoku"), 16) == 1283:
         result["kind"] = "CV ｻｲｸﾘｯｸﾎﾞﾙﾀﾝﾒﾄﾘ"
     else:
         result["kind"] = "unknown"
