@@ -11,11 +11,12 @@ def open_csv(filename):
 
 # ガター内の緑色のボタンを押すとスクリプトを実行します。
 if __name__ == '__main__':
-    convert_to_utf('./csv/CV_3_demo.CSV')
-    open_csv('./csv/CV_1.CSV')
+    file_name = "./csv/CV_1.CSV"
+    convert_to_utf(file_name)
+    open_csv(file_name)
     import polars as pl
 
-    q = pl.scan_csv("./csv/CV_1.CSV")
+    q = pl.scan_csv(file_name)
     print(q.columns)
 
 # test_csv(input)

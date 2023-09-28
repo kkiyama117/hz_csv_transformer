@@ -3,7 +3,35 @@ from typing import Iterator
 from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
     PostProcessingCondition, NaturePotentialCondition, PGSInfo
 from .models import RowData, BlockData
-from .utils import parse_row_data, parse_block
+from .utils import parse_row_data, parse_block_with_title, parse_block
+
+
+class NextIterator:
+    def __init__(self, stream):
+        # *args
+        # self.args = args
+        self.stream = stream
+
+    def __iter__(self) -> Iterator:
+        return self
+
+    def __next__(self):
+        _block_title = ""
+        _block_title = next(self.stream)[0]
+        while _block_title == "":
+            _block_title = next(self.stream)[0]
+        result = None
+        if _block_title == "《ファイル情報》":
+            stream, result = parse_file_info(self.stream)
+        elif _block_title == '《測定情報》':
+            stream, result = parse_messing_info(self.stream)
+        elif _block_title == '《測定条件》':
+            stream, result = parse_condition_info(self.stream)
+        elif _block_title == '《PGS設定》':
+            stream, result = parse_pgs(self.stream)
+        else:
+            raise StopIteration
+        return result
 
 
 def parse_file_info(stream: Iterator):
@@ -45,9 +73,9 @@ def parse_messing_info(stream: Iterator):
 
 def parse_condition_info(stream: Iterator):
     base = {}
-    title = "《測定条件》"
-    while next(stream)[0] != title:
-        pass
+    # title = '《測定条件》'
+    # while next(stream)[0] != title:
+    #     pass
     stream, result = _parse_honsokutei(stream)
     base["main_measure"] = result
     stream, result = _parse_sizendeni(stream)
@@ -74,7 +102,7 @@ def _parse_honsokutei(stream):
             RowData("dead_time", "不感時間", start=3),
         ]
     )
-    stream, result = parse_block(stream, _data)
+    stream, result = parse_block_with_title(stream, _data)
     return stream, MainMeasureCondition(**result)
 
 
@@ -88,7 +116,7 @@ def _parse_sizendeni(stream):
             RowData("interval", "ｻﾝﾌﾟﾘﾝｸﾞ間隔", start=3),
         ]
     )
-    stream, result = parse_block(stream, _data)
+    stream, result = parse_block_with_title(stream, _data)
     return stream, NaturePotentialCondition(**result)
 
 
@@ -102,7 +130,7 @@ def _parse_syokideni(stream):
             RowData("interval", "ｻﾝﾌﾟﾘﾝｸﾞ間隔", start=3),
         ]
     )
-    stream, result = parse_block(stream, _data)
+    stream, result = parse_block_with_title(stream, _data)
     return stream, FirstPotentialCondition(**result)
 
 
@@ -116,15 +144,15 @@ def _parse_atosyori(stream):
             RowData("interval", "ｻﾝﾌﾟﾘﾝｸﾞ間隔", start=3),
         ]
     )
-    stream, result = parse_block(stream, _data)
+    stream, result = parse_block_with_title(stream, _data)
     return stream, PostProcessingCondition(**result)
 
 
 def parse_pgs(stream):
     first_row: list = next(stream)
-    title = "《PGS設定》"
-    while next(stream)[0] != title:
-        pass
+    # title = '《PGS設定》'
+    # while next(stream)[0] != title:
+    #     pass
     _data = BlockData(
         title="[本測定]",
         start=2,
