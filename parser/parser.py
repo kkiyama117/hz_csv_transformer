@@ -172,3 +172,6 @@ def parse_pgs(stream):
     )
     stream, result = parse_block(stream, _data)
     return stream, PGSInfo(**result)
+
+def parse_cvcycle():
+    pass
