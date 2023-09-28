@@ -16,7 +16,7 @@ def convert_to_utf(filename):
     if result != "utf8":
         if result == "SHIFT_JIS":
             result = "CP932"
-        with open(filename, newline='', encoding=result) as f:
+        with open(filename,encoding=result) as f:
             _data = f.read()
-        with open(filename, "w", newline='', encoding="utf8") as f:
+        with open(filename, "w", encoding="utf8") as f:
             f.write(_data)

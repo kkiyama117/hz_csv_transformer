@@ -11,7 +11,7 @@ def open_csv(filename):
 
 # ガター内の緑色のボタンを押すとスクリプトを実行します。
 if __name__ == '__main__':
-    convert_to_utf('./csv/CV_1.CSV')
+    convert_to_utf('./csv/CV_3_demo.CSV')
     open_csv('./csv/CV_1.CSV')
     import polars as pl
 
