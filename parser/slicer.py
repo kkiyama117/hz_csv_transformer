@@ -1,6 +1,5 @@
 import csv
 
-from models.csv_structure import info_to_csv, AllInfo
 from parser import parse_file_info, parse_messing_info, parse_condition_info, parse_pgs, NextIterator
 
 
