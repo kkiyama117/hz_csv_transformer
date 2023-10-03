@@ -10,6 +10,7 @@ packages = [{include = "csv_transformer"}]
 python = "^3.11"
 polars = "^0.19.5"
 chardet = "^5.2.0"
+maya = "^0.6.1"
 
 
 [build-system]

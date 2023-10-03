@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from enum import Enum, auto
+
+from maya import MayaDT
 
 
 @dataclass
@@ -96,3 +99,36 @@ class AllInfo:
     measure: MeasureInfo
     condition: ConditionInfo
     pgs: PGSInfo
+
+
+class PhaseInfoKind(Enum):
+    natural = auto()
+    first = auto()
+    real = auto()
+
+
+@dataclass
+class CVPhaseInfo:
+    phase: PhaseInfoKind
+    cycle_num: int
+    measure_point: int
+
+
+@dataclass
+class CycleInfo:
+    start: MayaDT
+    end: MayaDT
+
+
+@dataclass
+class SamplingHeader:
+    data_count: int
+    item_count: int
+
+
+@dataclass
+class CVData:
+    phase: CVPhaseInfo
+    info: CycleInfo
+    header: SamplingHeader
+    data: int
