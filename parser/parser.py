@@ -199,13 +199,13 @@ def _parse_phase_info(stream):
     stream, result = parse_block(stream, _data)
     _phase_int = result.pop("_phase_int")
     if int(_phase_int, 16) == 1537:
-        result["phase"] = PhaseInfoKind.natural
+        result["kind"] = PhaseInfoKind.natural
     elif int(_phase_int, 16) == 1538:
-        result["phase"] = PhaseInfoKind.first
+        result["kind"] = PhaseInfoKind.first
     elif int(_phase_int, 16) == 1536:
-        result["phase"] = PhaseInfoKind.real
+        result["kind"] = PhaseInfoKind.real
     else:
-        result["phase"] = PhaseInfoKind.unknown
+        result["kind"] = PhaseInfoKind.unknown
 
     return stream, CVPhaseInfo(**result)
 

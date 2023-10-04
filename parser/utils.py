@@ -64,7 +64,6 @@ def csv_table_parser(stream):
     for i, data in enumerate(_first_row):
         if data == "":
             _first_row[i] = "NoData" + str(i)
-    print(_first_row)
     while True:
         _row_data = next(stream)
         if _row_data[1] == "":

@@ -109,7 +109,6 @@ class PhaseInfoKind(Enum):
     real = auto()
 
     def __str__(self):
-        print(self.name)
         if self.name == "real":
             return "本測定"
         elif self.name == "natural":
@@ -123,7 +122,7 @@ class PhaseInfoKind(Enum):
 
 @dataclass
 class CVPhaseInfo:
-    phase: PhaseInfoKind
+    kind: PhaseInfoKind
     cycle_num: int
     measure_point: int
 
