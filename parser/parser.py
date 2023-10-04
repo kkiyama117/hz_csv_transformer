@@ -4,7 +4,7 @@ import maya
 
 from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
     PostProcessingCondition, NaturePotentialCondition, PGSInfo, CVPhaseInfo, PhaseInfoKind, CycleInfo, SamplingHeader, \
-    CVData
+    CVData, AnalysisDataHeader
 from .models import RowData, BlockData
 from .utils import parse_row_data, parse_block_with_title, parse_block, original_datetime_converter, csv_table_parser
 
@@ -40,6 +40,8 @@ class NextIterator:
             stream, result = parse_pgs(self.stream)
         elif _block_title == '《測定フェイズヘッダ》':
             stream, result = parse_cv_cycle(self.stream)
+        elif _block_title == '《解析データヘッダ》':
+            stream, result = parse_analysis_header(self.stream)
         else:
             raise StopIteration
         return result
@@ -251,3 +253,14 @@ def parse_cv_cycle(stream):
     stream, result = csv_table_parser(stream)
     base["data"] = result
     return stream, CVData(**base)
+
+
+def parse_analysis_header(stream):
+    _data = BlockData(
+        title='《解析データヘッダ》',
+        rows=[
+            RowData("data_count", "解析データ数"),
+        ]
+    )
+    stream, result = parse_block(stream, _data)
+    return stream, AnalysisDataHeader(**result)

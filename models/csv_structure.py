@@ -146,3 +146,8 @@ class CVData:
     info: CycleInfo
     header: SamplingHeader
     data: DataFrame
+
+
+@dataclass
+class AnalysisDataHeader:
+    data_count: int

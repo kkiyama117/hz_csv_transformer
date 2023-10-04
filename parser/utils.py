@@ -54,12 +54,25 @@ def original_datetime_converter(data):
 
 
 def csv_table_parser(stream):
+    while next(stream)[0] != "《測定データ》":
+        pass
     result = []
+    _tmp = []
     # データは2列目から(と信じて取り続ける)
+    # 最初だけ列
+    _first_row = next(stream)
+    for i, data in enumerate(_first_row):
+        if data == "":
+            _first_row[i] = "NoData" + str(i)
+    print(_first_row)
     while True:
         _row_data = next(stream)
         if _row_data[1] == "":
             break
-
+        else:
+            _tmp.append(_row_data)
+    result = pl.DataFrame(_tmp).transpose()
+    result.columns = _first_row
+    # result = CVRealData(data=result)
     # print(q.columns)
-    return stream, None
+    return stream, result
