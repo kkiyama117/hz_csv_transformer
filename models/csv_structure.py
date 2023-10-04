@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 
 from maya import MayaDT
+from polars import DataFrame
 
 
 @dataclass
@@ -102,9 +103,22 @@ class AllInfo:
 
 
 class PhaseInfoKind(Enum):
+    unknown = 0
     natural = auto()
     first = auto()
     real = auto()
+
+    def __str__(self):
+        print(self.name)
+        if self.name == "real":
+            return "本測定"
+        elif self.name == "natural":
+            return "自然電位測定"
+        elif self.name == "first":
+            return "初期電位測定"
+        elif self.name == "unknown":
+            return "不明"
+        return "不明"
 
 
 @dataclass
@@ -131,4 +145,4 @@ class CVData:
     phase: CVPhaseInfo
     info: CycleInfo
     header: SamplingHeader
-    data: int
+    data: DataFrame

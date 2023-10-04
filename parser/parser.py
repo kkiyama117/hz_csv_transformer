@@ -1,7 +1,7 @@
 from typing import Iterator
 
 from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
-    PostProcessingCondition, NaturePotentialCondition, PGSInfo
+    PostProcessingCondition, NaturePotentialCondition, PGSInfo, CVPhaseInfo, PhaseInfoKind
 from .models import RowData, BlockData
 from .utils import parse_row_data, parse_block_with_title, parse_block
 
@@ -29,6 +29,8 @@ class NextIterator:
             stream, result = parse_condition_info(self.stream)
         elif _block_title == '《PGS設定》':
             stream, result = parse_pgs(self.stream)
+        elif _block_title == '《測定フェイズヘッダ》':
+            stream, result = parse_cv_cycle(self.stream)
         else:
             raise StopIteration
         return result
@@ -173,5 +175,42 @@ def parse_pgs(stream):
     stream, result = parse_block(stream, _data)
     return stream, PGSInfo(**result)
 
-def parse_cvcycle():
-    pass
+
+def _parse_phase_info(stream):
+    _data = BlockData(
+        title='《測定ファイルヘッダ》',
+        rows=[
+            RowData("_phase_int", "フェイズ情報"),
+            RowData("cycle_num", "サイクル番号"),
+            RowData("measure_point", "測定点数"),
+        ]
+    )
+    stream, result = parse_block(stream, _data)
+    _phase_int = result.pop("_phase_int")
+    if int(_phase_int, 16) == 1537:
+        result["phase"] = PhaseInfoKind.natural
+    elif int(_phase_int, 16) == 1538:
+        result["phase"] = PhaseInfoKind.first
+    elif int(_phase_int, 16) == 1536:
+        result["phase"] = PhaseInfoKind.real
+    else:
+        result["phase"] = PhaseInfoKind.unknown
+
+    return stream, CVPhaseInfo(**result)
+
+
+def parse_cv_cycle(stream):
+    # base = {}
+    # # title = '《測定条件》'
+    # # while next(stream)[0] != title:
+    # #     pass
+    # stream, result = _parse_honsokutei(stream)
+    # base["main_measure"] = result
+    # stream, result = _parse_sizendeni(stream)
+    # base["nature_potential"] = result
+    # stream, result = _parse_syokideni(stream)
+    # base["first_potential"] = result
+    # stream, result = _parse_atosyori(stream)
+    # base["post_process"] = result
+    # return stream, CVData(**base)
+    return _parse_phase_info(stream)
