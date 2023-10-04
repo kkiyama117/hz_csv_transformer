@@ -1,4 +1,8 @@
 from typing import Iterator, List
+import datetime
+import zoneinfo
+import maya
+import polars as pl
 
 from .models import BlockData, RowData
 
@@ -40,3 +44,22 @@ def parse_row_data(row, title, first, count):
     else:
         # TODO: return Error
         return None
+
+
+def original_datetime_converter(data):
+    _format = "%Y/%m/%d %H:%M"
+    result = datetime.datetime.strptime(data, _format).replace(tzinfo=zoneinfo.ZoneInfo(key="Asia/Tokyo"))
+    result = maya.MayaDT.from_datetime(result)
+    return result
+
+
+def csv_table_parser(stream):
+    result = []
+    # データは2列目から(と信じて取り続ける)
+    while True:
+        _row_data = next(stream)
+        if _row_data[1] == "":
+            break
+
+    # print(q.columns)
+    return stream, None

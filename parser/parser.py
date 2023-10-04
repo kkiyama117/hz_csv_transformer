@@ -1,9 +1,12 @@
 from typing import Iterator
 
+import maya
+
 from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
-    PostProcessingCondition, NaturePotentialCondition, PGSInfo, CVPhaseInfo, PhaseInfoKind
+    PostProcessingCondition, NaturePotentialCondition, PGSInfo, CVPhaseInfo, PhaseInfoKind, CycleInfo, SamplingHeader, \
+    CVData
 from .models import RowData, BlockData
-from .utils import parse_row_data, parse_block_with_title, parse_block
+from .utils import parse_row_data, parse_block_with_title, parse_block, original_datetime_converter, csv_table_parser
 
 
 class NextIterator:
@@ -16,11 +19,17 @@ class NextIterator:
         return self
 
     def __next__(self):
+        # 0. data
         _block_title = ""
+        result = None
+
+        # 1. 次の行を取る
         _block_title = next(self.stream)[0]
+        # 2. 次が空ならデータ入りに当たるまで取り続ける
         while _block_title == "":
             _block_title = next(self.stream)[0]
-        result = None
+
+        # 3. 場合分けして取る, 未知ならStopIteration
         if _block_title == "《ファイル情報》":
             stream, result = parse_file_info(self.stream)
         elif _block_title == '《測定情報》':
@@ -199,18 +208,46 @@ def _parse_phase_info(stream):
     return stream, CVPhaseInfo(**result)
 
 
+def _parse_cycle_info(stream):
+    # title = '《PGS設定》'
+    # while next(stream)[0] != title:
+    #     pass
+    _data = BlockData(
+        title='《サイクル情報》',
+        rows=[
+            RowData("start", "開始時間"),
+            RowData("end", "終了時間"),
+        ]
+    )
+    stream, result = parse_block_with_title(stream, _data)
+    result["start"] = original_datetime_converter(result["start"])
+    result["end"] = original_datetime_converter(result["end"])
+    return stream, CycleInfo(**result)
+
+
+def _parse_sampling_header(stream):
+    _data = BlockData(
+        title='《測定サンプリングヘッダ》',
+        rows=[
+            RowData("data_count", "データ数"),
+            RowData("item_count", "データ項目数"),
+        ]
+    )
+    stream, result = parse_block_with_title(stream, _data)
+    return stream, SamplingHeader(**result)
+
+
 def parse_cv_cycle(stream):
-    # base = {}
-    # # title = '《測定条件》'
-    # # while next(stream)[0] != title:
-    # #     pass
-    # stream, result = _parse_honsokutei(stream)
-    # base["main_measure"] = result
-    # stream, result = _parse_sizendeni(stream)
-    # base["nature_potential"] = result
-    # stream, result = _parse_syokideni(stream)
-    # base["first_potential"] = result
-    # stream, result = _parse_atosyori(stream)
-    # base["post_process"] = result
-    # return stream, CVData(**base)
-    return _parse_phase_info(stream)
+    base = {}
+    # title = '《測定フェイズヘッダ》'
+    # while next(stream)[0] != title:
+    #     pass
+    stream, result = _parse_phase_info(stream)
+    base["phase"] = result
+    stream, result = _parse_cycle_info(stream)
+    base["info"] = result
+    stream, result = _parse_sampling_header(stream)
+    base["header"] = result
+    stream, result = csv_table_parser(stream)
+    base["data"] = result
+    return stream, CVData(**base)
