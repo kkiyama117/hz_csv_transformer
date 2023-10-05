@@ -77,6 +77,6 @@ def csv_table_parser(stream):
     # print(q.columns)
     return stream, result
 
+
 def is_real_data(data):
     return type(data) is CVData and data.phase.kind == PhaseInfoKind.real
-
