@@ -1,8 +1,10 @@
 # これはサンプルの Python スクリプトです。
 import csv
-from parser import parse_file_info, parse_messing_info, parse_condition_info, parse_pgs, NextIterator
+
+from models.csv_structure import CVData
+from my_polars import CVTransformer
+from parser import NextIterator, is_real_data
 from utils import convert_to_utf
-from models.csv_structure import CVData, PhaseInfoKind
 
 
 def open_csv(filename):
@@ -11,13 +13,10 @@ def open_csv(filename):
             f, delimiter=",", skipinitialspace=True
         )
         result = []
-        for i in filter(_is_real_data, NextIterator(csv_reader)):
-            print(i)
+        for data in filter(is_real_data, NextIterator(csv_reader)):
+            _trans = CVTransformer(data)
+            print(_trans.calc_density(1))
             # result.append(i)
-
-
-def _is_real_data(data):
-    return type(data) is CVData and data.phase.kind == PhaseInfoKind.real
 
 
 # ガター内の緑色のボタンを押すとスクリプトを実行します。

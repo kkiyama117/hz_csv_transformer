@@ -4,6 +4,7 @@ import zoneinfo
 import maya
 import polars as pl
 
+from models.csv_structure import CVData, PhaseInfoKind
 from .models import BlockData, RowData
 
 
@@ -75,3 +76,7 @@ def csv_table_parser(stream):
     # result = CVRealData(data=result)
     # print(q.columns)
     return stream, result
+
+def is_real_data(data):
+    return type(data) is CVData and data.phase.kind == PhaseInfoKind.real
+

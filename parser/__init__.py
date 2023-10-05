@@ -1,4 +1,6 @@
-from .parser import *
-from .models import *
+from .parser import NextIterator
+from .utils import is_real_data
 
-# __all__ = [parse_file_info, parse_messing_info]
+# from .models import *
+
+__all__ = [NextIterator, is_real_data]

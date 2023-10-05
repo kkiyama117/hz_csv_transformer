@@ -11,6 +11,7 @@ python = "^3.11"
 polars = "^0.19.5"
 chardet = "^5.2.0"
 maya = "^0.6.1"
+seaborn = "^0.13.0"
 
 
 [build-system]
