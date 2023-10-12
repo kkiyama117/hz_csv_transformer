@@ -27,7 +27,10 @@ class CVTransformer:
             # TODO: raise Error
             pass
 
+    def calc(self, area):
+        return self.calc_density(area)
+
     def calc_density(self, area: float):
-        _nc = pl.col("current") / area
+        _nc = pl.col("current") *1000 / area
         self.data = self.data.with_columns(_nc.alias("current density"))
         return self.data
