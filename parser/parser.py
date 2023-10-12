@@ -19,6 +19,13 @@ def open_csv(filename):
         )
         yield NextIterator(csv_reader)
 
+def open_csv2(filename):
+    with open(filename, newline='', mode="r") as f:
+        csv_reader = csv.reader(
+            f, delimiter=",", skipinitialspace=True
+        )
+        return NextIterator(csv_reader)
+
 
 class NextIterator:
     def __init__(self, stream, ):
