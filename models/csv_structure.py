@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from dataclasses import dataclass
 from enum import Enum, auto
 
@@ -5,8 +6,12 @@ from maya import MayaDT
 from polars import DataFrame
 
 
+class CSVInfo(metaclass=ABCMeta):
+    pass
+
+
 @dataclass
-class FileInfo:
+class FileInfo(CSVInfo):
     koumoku: int
     kind: str
     title: str
@@ -15,7 +20,7 @@ class FileInfo:
 
 
 @dataclass
-class MeasureInfo:
+class MeasureInfo(CSVInfo):
     siryou: str
     working_electrode: str
     area: str
@@ -27,7 +32,7 @@ class MeasureInfo:
 
 
 @dataclass
-class MainMeasureCondition:
+class MainMeasureCondition(CSVInfo):
     first_potential: int
     second_potential: int
     # mV/s
@@ -41,7 +46,7 @@ class MainMeasureCondition:
 
 
 @dataclass
-class NaturePotentialCondition:
+class NaturePotentialCondition(CSVInfo):
     # sec
     measurement_time: int
     # mV
@@ -51,7 +56,7 @@ class NaturePotentialCondition:
 
 
 @dataclass
-class FirstPotentialCondition:
+class FirstPotentialCondition(CSVInfo):
     # V
     initial: int | str
     # sec
@@ -61,7 +66,7 @@ class FirstPotentialCondition:
 
 
 @dataclass
-class PostProcessingCondition:
+class PostProcessingCondition(CSVInfo):
     kind: str
     # sec
     holding_time: int
@@ -70,7 +75,7 @@ class PostProcessingCondition:
 
 
 @dataclass
-class ConditionInfo:
+class ConditionInfo(CSVInfo):
     main_measure: MainMeasureCondition
     nature_potential: NaturePotentialCondition
     first_potential: FirstPotentialCondition
@@ -78,7 +83,7 @@ class ConditionInfo:
 
 
 @dataclass
-class PGSInfo:
+class PGSInfo(CSVInfo):
     operating_mode: str
     internal_setting: str
     # V
@@ -95,7 +100,7 @@ class PGSInfo:
 
 
 @dataclass
-class AllInfo:
+class AllInfo(CSVInfo):
     file: FileInfo
     measure: MeasureInfo
     condition: ConditionInfo
@@ -121,26 +126,26 @@ class PhaseInfoKind(Enum):
 
 
 @dataclass
-class CVPhaseInfo:
+class CVPhaseInfo(CSVInfo):
     kind: PhaseInfoKind
     cycle_num: int
     measure_point: int
 
 
 @dataclass
-class CycleInfo:
+class CycleInfo(CSVInfo):
     start: MayaDT
     end: MayaDT
 
 
 @dataclass
-class SamplingHeader:
+class SamplingHeader(CSVInfo):
     data_count: int
     item_count: int
 
 
 @dataclass
-class CVData:
+class CVData(CSVInfo):
     phase: CVPhaseInfo
     info: CycleInfo
     header: SamplingHeader
@@ -148,6 +153,5 @@ class CVData:
 
 
 @dataclass
-class AnalysisDataHeader:
+class AnalysisDataHeader(CSVInfo):
     data_count: int
-

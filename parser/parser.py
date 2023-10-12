@@ -2,11 +2,9 @@ import csv
 import contextlib
 from typing import Iterator
 
-import maya
-
 from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
     PostProcessingCondition, NaturePotentialCondition, PGSInfo, CVPhaseInfo, PhaseInfoKind, CycleInfo, SamplingHeader, \
-    CVData, AnalysisDataHeader
+    CVData, AnalysisDataHeader, CSVInfo
 from .models import RowData, BlockData
 from .utils import parse_row_data, parse_block_with_title, parse_block, original_datetime_converter, csv_table_parser
 
@@ -19,6 +17,7 @@ def open_csv(filename):
         )
         yield NextIterator(csv_reader)
 
+
 def open_csv2(filename):
     with open(filename, newline='', mode="r") as f:
         csv_reader = csv.reader(
@@ -28,7 +27,7 @@ def open_csv2(filename):
 
 
 class NextIterator:
-    def __init__(self, stream, ):
+    def __init__(self, stream: Iterator, ):
         # *args
         # self.args = args
         self.stream = stream
@@ -36,7 +35,7 @@ class NextIterator:
     def __iter__(self) -> Iterator:
         return self
 
-    def __next__(self):
+    def __next__(self) -> CSVInfo:
         # 0. data
         _block_title = ""
         result = None
@@ -65,7 +64,7 @@ class NextIterator:
         return result
 
 
-def parse_file_info(stream: Iterator):
+def parse_file_info(stream: Iterator) -> (Iterator, CSVInfo):
     _data = BlockData(
         title='《ファイル情報》',
         rows=[
