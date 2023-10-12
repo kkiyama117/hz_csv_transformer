@@ -1,3 +1,5 @@
+import csv
+import contextlib
 from typing import Iterator
 
 import maya
@@ -9,8 +11,17 @@ from .models import RowData, BlockData
 from .utils import parse_row_data, parse_block_with_title, parse_block, original_datetime_converter, csv_table_parser
 
 
+@contextlib.contextmanager
+def open_csv(filename):
+    with open(filename, newline='', mode="r") as f:
+        csv_reader = csv.reader(
+            f, delimiter=",", skipinitialspace=True
+        )
+        yield NextIterator(csv_reader)
+
+
 class NextIterator:
-    def __init__(self, stream):
+    def __init__(self, stream, ):
         # *args
         # self.args = args
         self.stream = stream
