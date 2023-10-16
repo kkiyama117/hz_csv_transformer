@@ -1,7 +1,7 @@
 import math
 
 from parser import parser
-from plotter.cv import create_cv_graph
+from plotter.cv import create_cv_graph_all
 from utils import convert_to_utf, generate_origin_data
 
 if __name__ == '__main__':
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     print(area)
     # generate graph
     with parser.open_csv(file_name) as parsed_csv:
-        create_cv_graph(parsed_csv, area)
+        create_cv_graph_all(parsed_csv, area)
     # get cv_data
     with parser.open_csv(file_name) as parsed_csv:
         for i in generate_origin_data(parsed_csv, area):

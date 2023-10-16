@@ -15,23 +15,25 @@ class GraphInfo:
     kind: str = "line"
 
 
-def create_cv_graph(parsed_csv: NextIterator, area: float):
+def create_cv_graph_all(parsed_csv: NextIterator, area: float):
     sns.set_theme()
     _meta = GraphInfo(
         x_title="potential",
         y_title="current density",
         hue="凡例")
+    fig, axes = plt.subplots()
+    fig.suptitle("CV graph")
     for data in parsed_csv:
         if is_real_data(data):
             _trans = CVTransformer(data)
             _trans.calc(area)
             print(_trans.data.glimpse())
             print(_trans.data)
-            fig = plt.figure()
-            fig.suptitle("CV graph")
+            axes.plot(_trans.data[_meta.x_title], _trans.data[_meta.y_title])
+    axes.set_ylabel("Current Density (mA cm-2)")
+    axes.set_xlabel("Potential v.s. Al/Al(III) (V)")
 
-            plt.plot(_trans.data[_meta.x_title], _trans.data[_meta.y_title])
-
+    axes.legend()
     plt.savefig('sample.png')
     plt.show()
     # matplotlib.pyplot.show(block=False)
