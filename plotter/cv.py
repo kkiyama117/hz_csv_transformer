@@ -27,6 +27,9 @@ def create_cv_graph(parsed_csv: NextIterator, area: float):
             _trans.calc(area)
             print(_trans.data.glimpse())
             print(_trans.data)
+            fig = plt.figure()
+            fig.suptitle("CV graph")
+
             plt.plot(_trans.data[_meta.x_title], _trans.data[_meta.y_title])
 
     plt.savefig('sample.png')
