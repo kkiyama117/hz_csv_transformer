@@ -4,7 +4,7 @@ import zoneinfo
 import maya
 import polars as pl
 
-from models.csv_structure import CVData, PhaseInfoKind
+from models.csv_structure import CVData, PhaseInfoKind, CSVInfo
 from .models import BlockData, RowData
 
 
@@ -18,7 +18,7 @@ def parse_block_with_title(stream: Iterator, data_info: BlockData):
     return parse_block(stream, data_info)
 
 
-def parse_block(stream: Iterator, data_info: BlockData):
+def parse_block(stream: Iterator, data_info: BlockData) -> (Iterator, CSVInfo):
     data_list: List[RowData] = data_info.rows
     result = {}
     for _d in data_list:
@@ -28,11 +28,11 @@ def parse_block(stream: Iterator, data_info: BlockData):
     return stream, result
 
 
-def _parse_row_data_from_rowdata(row: List[str], rowdata: RowData):
+def _parse_row_data_from_rowdata(row: List[str], rowdata: RowData) -> str | None:
     return parse_row_data(row, rowdata.japanese, rowdata.start, rowdata.count)
 
 
-def parse_row_data(row, title, first, count):
+def parse_row_data(row, title, first, count) -> str | None:
     if row[first - 1] == title:
         if count == 1:
             return row[first]
@@ -47,14 +47,14 @@ def parse_row_data(row, title, first, count):
         return None
 
 
-def original_datetime_converter(data):
+def original_datetime_converter(data: str):
     _format = "%Y/%m/%d %H:%M"
     result = datetime.datetime.strptime(data, _format).replace(tzinfo=zoneinfo.ZoneInfo(key="Asia/Tokyo"))
     result = maya.MayaDT.from_datetime(result)
     return result
 
 
-def csv_table_parser(stream):
+def csv_table_parser(stream: Iterator):
     while next(stream)[0] != "《測定データ》":
         pass
     result = []
@@ -78,5 +78,5 @@ def csv_table_parser(stream):
     return stream, result
 
 
-def is_real_data(data):
+def is_real_data(data: CSVInfo) -> bool:
     return type(data) is CVData and data.phase.kind == PhaseInfoKind.real

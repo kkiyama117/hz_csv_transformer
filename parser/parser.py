@@ -83,7 +83,7 @@ def parse_file_info(stream: Iterator) -> (Iterator, CSVInfo):
     return stream, FileInfo(**result)
 
 
-def parse_messing_info(stream: Iterator):
+def parse_messing_info(stream: Iterator) -> (Iterator, CSVInfo):
     _data = BlockData(
         title='《測定情報》',
         rows=[
@@ -101,7 +101,7 @@ def parse_messing_info(stream: Iterator):
     return stream, MeasureInfo(**result)
 
 
-def parse_condition_info(stream: Iterator):
+def parse_condition_info(stream: Iterator) -> (Iterator, CSVInfo):
     base = {}
     # title = '《測定条件》'
     # while next(stream)[0] != title:
@@ -117,7 +117,7 @@ def parse_condition_info(stream: Iterator):
     return stream, ConditionInfo(**base)
 
 
-def _parse_honsokutei(stream):
+def _parse_honsokutei(stream) -> (Iterator, CSVInfo):
     _data = BlockData(
         title="[本測定]",
         start=2,
@@ -136,7 +136,7 @@ def _parse_honsokutei(stream):
     return stream, MainMeasureCondition(**result)
 
 
-def _parse_sizendeni(stream):
+def _parse_sizendeni(stream) -> (Iterator, CSVInfo):
     _data = BlockData(
         title="[自然電位]",
         start=2,
@@ -150,7 +150,7 @@ def _parse_sizendeni(stream):
     return stream, NaturePotentialCondition(**result)
 
 
-def _parse_syokideni(stream):
+def _parse_syokideni(stream) -> (Iterator, CSVInfo):
     _data = BlockData(
         title="[初期電位]",
         start=2,
@@ -164,7 +164,7 @@ def _parse_syokideni(stream):
     return stream, FirstPotentialCondition(**result)
 
 
-def _parse_atosyori(stream):
+def _parse_atosyori(stream) -> (Iterator, CSVInfo):
     _data = BlockData(
         title="[後処理]",
         start=2,
@@ -178,7 +178,7 @@ def _parse_atosyori(stream):
     return stream, PostProcessingCondition(**result)
 
 
-def parse_pgs(stream):
+def parse_pgs(stream) -> (Iterator, CSVInfo):
     first_row: list = next(stream)
     # title = '《PGS設定》'
     # while next(stream)[0] != title:
@@ -204,7 +204,7 @@ def parse_pgs(stream):
     return stream, PGSInfo(**result)
 
 
-def _parse_phase_info(stream):
+def _parse_phase_info(stream) -> (Iterator, CSVInfo):
     _data = BlockData(
         title='《測定ファイルヘッダ》',
         rows=[
@@ -227,7 +227,7 @@ def _parse_phase_info(stream):
     return stream, CVPhaseInfo(**result)
 
 
-def _parse_cycle_info(stream):
+def _parse_cycle_info(stream) -> (Iterator, CSVInfo):
     # title = '《PGS設定》'
     # while next(stream)[0] != title:
     #     pass
@@ -244,7 +244,7 @@ def _parse_cycle_info(stream):
     return stream, CycleInfo(**result)
 
 
-def _parse_sampling_header(stream):
+def _parse_sampling_header(stream) -> (Iterator, CSVInfo):
     _data = BlockData(
         title='《測定サンプリングヘッダ》',
         rows=[
@@ -256,7 +256,7 @@ def _parse_sampling_header(stream):
     return stream, SamplingHeader(**result)
 
 
-def parse_cv_cycle(stream):
+def parse_cv_cycle(stream) -> (Iterator, CVData):
     base = {}
     # title = '《測定フェイズヘッダ》'
     # while next(stream)[0] != title:
@@ -272,7 +272,7 @@ def parse_cv_cycle(stream):
     return stream, CVData(**base)
 
 
-def parse_analysis_header(stream):
+def parse_analysis_header(stream) -> (Iterator, CSVInfo):
     _data = BlockData(
         title='《解析データヘッダ》',
         rows=[

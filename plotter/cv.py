@@ -25,22 +25,10 @@ def create_cv_graph(parsed_csv: NextIterator, area: float):
         if is_real_data(data):
             _trans = CVTransformer(data)
             _trans.calc(area)
-
-            # sns.scatterplot(
-            #     _trans.data,
-            #     x=_meta.x_title,
-            #     y=_meta.y_title,
-            # )
-            # plt.scatter(_trans.data[_meta.x_title], _trans.data[_meta.y_title])
             print(_trans.data.glimpse())
             print(_trans.data)
             plt.plot(_trans.data[_meta.x_title], _trans.data[_meta.y_title])
-            # sns.lineplot(
-            #     _trans.data,
-            #     x=_meta.x_title,
-            #     y=_meta.y_title,
-            # )
+
     plt.savefig('sample.png')
     plt.show()
     # matplotlib.pyplot.show(block=False)
-    # result.append(i)

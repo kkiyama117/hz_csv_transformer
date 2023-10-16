@@ -1,8 +1,9 @@
 from dataclasses import asdict
-
-import csv
 from chardet.universaldetector import UniversalDetector
 import pickle
+
+from my_polars import CVTransformer
+from parser import NextIterator, is_real_data
 
 
 def convert_to_utf(filename):
@@ -35,3 +36,18 @@ def pickle_to_info(name):
     with open("test.pickle", mode="rb") as f:
         res = pickle.load(f)
     print(res)
+
+
+# generate origin 2021 data from parsed_csv
+# parsed_csv: NextIterator
+# area: area of electrode
+# number: optional. set number of data if needed.
+def generate_origin_data(parsed_csv: NextIterator, area: float, number: int = -1):
+    for (count, _data) in enumerate(filter(is_real_data, parsed_csv)):
+        if number < 0:
+            _trans = CVTransformer(_data)
+            yield _trans.create_origin_input_with_density(area)
+        else:
+            if number == count:
+                _trans = CVTransformer(_data)
+                yield _trans.create_origin_input_with_density(area)

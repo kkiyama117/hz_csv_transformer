@@ -1,3 +1,5 @@
+from polars import DataFrame
+
 from models.csv_structure import CVData
 import polars as pl
 
@@ -30,7 +32,12 @@ class CVTransformer:
     def calc(self, area):
         return self.calc_density(area)
 
-    def calc_density(self, area: float):
-        _nc = pl.col("current") *1000 / area
+    def calc_density(self, area: float) -> DataFrame:
+        _nc = pl.col("current") * 1000 / area
         self.data = self.data.with_columns(_nc.alias("current density"))
         return self.data
+
+    def create_origin_input_with_density(self, area: float) -> DataFrame:
+        _data = self.calc_density(area)
+        _data = _data.select("potential", "current density")
+        return _data
