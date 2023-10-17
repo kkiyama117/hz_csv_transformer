@@ -9,12 +9,12 @@ if __name__ == '__main__':
     convert_to_utf(file_name)
     # calc your electrode area
     _r = 0.15
+    # 0.15cm*0.15cm*Pi
     area = pow(_r, 2) * math.pi
-    print(area)
     # generate graph
     with parser.open_csv(file_name) as parsed_csv:
         create_cv_graph_all(parsed_csv, area)
     # get cv_data
-    with parser.open_csv(file_name) as parsed_csv:
-        for i in generate_origin_data(parsed_csv, area):
-            print(i)
+    # with parser.open_csv(file_name) as parsed_csv:
+    #     for i in generate_origin_data(parsed_csv, area):
+    #         print(i)
