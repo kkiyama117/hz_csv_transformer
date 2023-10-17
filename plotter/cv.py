@@ -15,9 +15,14 @@ class GraphInfo:
     kind: str = "line"
 
 
-def create_cv_graph_all(parsed_csv: NextIterator, area: float):
-    # sns.set_theme()
+def _plt_config():
     plt.rcParams["font.family"] = "Meiryo"
+    # plt.rcParams['mathtext.fontset'] = 'Arial'
+
+
+def create_cv_graph_all(parsed_csv: NextIterator, area: float):
+    sns.set_theme()
+    _plt_config()
     _meta = GraphInfo(
         x_title="potential",
         y_title="current density",
