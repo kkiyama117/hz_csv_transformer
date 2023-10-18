@@ -2,8 +2,8 @@ import dataclasses
 
 import matplotlib.pyplot as plt
 
-from my_polars import CVTransformer
-from parser import is_real_data, NextIterator
+from hv_csv_transformer.my_polars import CVTransformer
+from hv_csv_transformer.parser import is_real_data, NextIterator
 import seaborn as sns
 
 

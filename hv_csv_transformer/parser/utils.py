@@ -4,7 +4,7 @@ import zoneinfo
 import maya
 import polars as pl
 
-from models.csv_structure import CVData, PhaseInfoKind, CSVInfo
+from hv_csv_transformer.models.csv_structure import CVData, PhaseInfoKind, CSVInfo
 from .models import BlockData, RowData
 
 

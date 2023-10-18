@@ -2,8 +2,8 @@ from dataclasses import asdict
 from chardet.universaldetector import UniversalDetector
 import pickle
 
-from my_polars import CVTransformer
-from parser import NextIterator, is_real_data
+from hv_csv_transformer.my_polars import CVTransformer
+from hv_csv_transformer.parser import NextIterator, is_real_data
 
 
 def convert_to_utf(filename):
@@ -27,13 +27,13 @@ def convert_to_utf(filename):
 
 def info_to_csv(info):
     data_dict = asdict(info)
-    with open("test.pickle", mode="wb") as f:
+    with open("../test.pickle", mode="wb") as f:
         pickle.dump(info, f)
     pickle_to_info("")
 
 
 def pickle_to_info(name):
-    with open("test.pickle", mode="rb") as f:
+    with open("../test.pickle", mode="rb") as f:
         res = pickle.load(f)
     print(res)
 

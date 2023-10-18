@@ -2,11 +2,11 @@ import csv
 import contextlib
 from typing import Iterator
 
-from models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
+from hv_csv_transformer.models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
     PostProcessingCondition, NaturePotentialCondition, PGSInfo, CVPhaseInfo, PhaseInfoKind, CycleInfo, SamplingHeader, \
     CVData, AnalysisDataHeader, CSVInfo
 from .models import RowData, BlockData
-from .utils import parse_row_data, parse_block_with_title, parse_block, original_datetime_converter, csv_table_parser
+from .utils import parse_block_with_title, parse_block, original_datetime_converter, csv_table_parser
 
 
 @contextlib.contextmanager

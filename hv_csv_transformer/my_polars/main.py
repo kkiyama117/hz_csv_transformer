@@ -1,6 +1,6 @@
 from polars import DataFrame
 
-from models.csv_structure import CVData
+from hv_csv_transformer.models.csv_structure import CVData
 import polars as pl
 
 

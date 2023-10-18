@@ -1,8 +1,8 @@
 import math
 
-from parser import parser
-from plotter.cv import create_cv_graph_all
-from utils import convert_to_utf, generate_origin_data
+from hv_csv_transformer.parser import parser
+from hv_csv_transformer.plotter.cv import create_cv_graph_all
+from hv_csv_transformer.utils import convert_to_utf
 
 if __name__ == '__main__':
     file_name = "./csv/CV_3.CSV"
