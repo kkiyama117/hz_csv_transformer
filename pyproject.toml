@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "csv-transformer"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["kkiyama117 <k.kiyama117@gmail.com>"]
 readme = "README.md"
