@@ -1,4 +1,6 @@
 import dataclasses
+from pathlib import Path
+from typing import Optional
 
 import matplotlib.pyplot as plt
 
@@ -20,7 +22,8 @@ def _plt_config():
     # plt.rcParams['mathtext.fontset'] = 'Arial'
 
 
-def create_cv_graph_all(parsed_csv: NextIterator, area: float):
+def create_cv_graph_all(parsed_csv: NextIterator, area: float, file_name: Optional[str] = None,
+                        path: Optional[Path] = None):
     sns.set_theme()
     _plt_config()
     _meta = GraphInfo(
@@ -40,6 +43,13 @@ def create_cv_graph_all(parsed_csv: NextIterator, area: float):
     axes.set_ylabel(r"$Current\ Density\ (mA\ cm^{-2}$)")
     axes.set_xlabel("Potential v.s. Al/Al(III) (V)")
 
-    plt.savefig('sample.png')
+    if file_name is None:
+        file_name = "sample.png"
+    if path is None:
+        _p = file_name
+    else:
+        _p = (path / file_name).absolute()
+    plt.savefig(_p)
+
     plt.show()
     # matplotlib.pyplot.show(block=False)

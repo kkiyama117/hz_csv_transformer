@@ -1,4 +1,5 @@
 import math
+from pathlib import Path
 
 from hv_csv_transformer.parser import parser
 from hv_csv_transformer.plotter.cv import create_cv_graph_all
@@ -13,7 +14,7 @@ if __name__ == '__main__':
     area = pow(_r, 2) * math.pi
     # generate graph
     with parser.open_csv(file_name) as parsed_csv:
-        create_cv_graph_all(parsed_csv, area)
+        create_cv_graph_all(parsed_csv, area, path=Path("~/documents").expanduser())
     # get cv_data
     # with parser.open_csv(file_name) as parsed_csv:
     #     for i in generate_origin_data(parsed_csv, area):
