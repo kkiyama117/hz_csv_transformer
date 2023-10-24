@@ -1,0 +1,13 @@
+[package]
+name = "hv_csv_transformer_rs"
+version = "0.1.3"
+authors = ["kkiyama117 <k.kiyama117@gmail.com>"]
+edition = "2021"
+
+[lib]
+name = "csv_transformer"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.20.0", features = ["extension-module"] }
+#features = ["auto-initialize"]

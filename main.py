@@ -6,7 +6,7 @@ from hv_csv_transformer.plotter.cv import create_cv_graph_all
 from hv_csv_transformer.utils import convert_to_utf
 
 if __name__ == '__main__':
-    file_name = "./csv/CV_3.CSV"
+    file_name = "csv/CV_3.CSV"
     convert_to_utf(file_name)
     # calc your electrode area
     _r = 0.15
