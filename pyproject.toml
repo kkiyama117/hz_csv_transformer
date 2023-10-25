@@ -40,6 +40,8 @@ dev-dependencies = [
     "PyQt5>=5.15.10",
     "maturin>=1.3.1",
     "pip>=23.3.1",
+    "nox>=2023.4.22",
+    "pytest>=7.4.3",
 ]
 
 [tool.hatch.metadata]
@@ -47,3 +49,4 @@ allow-direct-references = true
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+sdist-include = ["MANIFEST.in", "README.md"]

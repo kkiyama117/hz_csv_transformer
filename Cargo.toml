@@ -5,7 +5,7 @@ authors = ["kkiyama117 <k.kiyama117@gmail.com>"]
 edition = "2021"
 
 [lib]
-name = "csv_transformer"
+name = "hv_csv_transformer"
 crate-type = ["cdylib"]
 
 [dependencies]
