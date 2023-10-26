@@ -8,14 +8,12 @@ fn main() {
         use std::env;
         use std::path::Path;
 
-        // let src = env::var("CARGO_MANIFEST_DIR").unwrap();
-        // let dst = Path::new(&env::var("OUT_DIR").unwrap()).join("built.rs");
-        let mut opts = built::Options::default();
+        let src = env::var("CARGO_MANIFEST_DIR").unwrap();
+        let dst = Path::new(&env::var("OUT_DIR").unwrap()).join("built.rs");
+        // let mut opts = built::Options::default();
+        // opts.set_dependencies(true).set_compiler(true).set_env(true);
 
-        opts.set_dependencies(true).set_compiler(true).set_env(true);
-
-        // built::write_built_file_with_opts(&opts, Path::new(&src), &dst)
-        built::write_built_file_with_opts(&opts)
+        built::write_built_file_with_opts( Some(Path::new(&src)), &dst)
             .expect("Failed to acquire build-time information");
     }
 }
