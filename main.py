@@ -23,13 +23,3 @@ if __name__ == '__main__':
     # with parser.open_csv(file_name) as parsed_csv:
     #     for i in generate_origin_data(parsed_csv, area):
     #         print(i)
-
-    py_class = PythonClass(value=10)
-    print(py_class.value)
-    exa = ExampleClass(value=11)
-    print(exa.value)
-    import hv_csv_transformer
-
-    print(
-        hv_csv_transformer.__doc__
-    )
