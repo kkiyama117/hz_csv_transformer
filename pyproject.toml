@@ -51,5 +51,7 @@ allow-direct-references = true
 [tool.maturin]
 features = ["pyo3/extension-module"]
 sdist-include = ["MANIFEST.in", "README.md"]
+repository = "testpypi"
+non_interactive = true
 #bindings = "cffi"
 #compatibility = "linux"
