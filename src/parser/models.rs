@@ -18,6 +18,8 @@ struct RowData2{
 // }
 
 // https://pyo3.rs/v0.20.0/module#python-submodules
+#[pymodule]
+#[pyo3(name="models")]
 pub fn module(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_class::<RowData2>()?;
     Ok(())

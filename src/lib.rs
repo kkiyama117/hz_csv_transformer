@@ -61,7 +61,7 @@ fn hv_csv_transformer(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
 
     m.add_wrapped(wrap_pymodule!(parser::parser))?;
     // sys_modules.set_item("hv_csv_transformer.parser.models", m.getattr("parser")?)?;
-    sys_modules.set_item("hv_csv_transformer.parser_rs", m.getattr("parser")?)?;
+    sys_modules.set_item("hv_csv_transformer.parser_rs", m.getattr("parser_rs")?)?;
 
     // Inserting to sys.modules allows importing submodules nicely from Python
     // e.g. from maturin_starter.submodule import SubmoduleClass
