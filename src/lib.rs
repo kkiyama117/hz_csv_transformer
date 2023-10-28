@@ -56,13 +56,13 @@ fn hv_csv_transformer(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pymodule!(submodule::submodule))?;
     sys_modules.set_item("hv_csv_transformer.submodule", m.getattr("submodule")?)?;
 
-    register_child_module(_py, m)?;
-    sys_modules.set_item("hv_csv_transformer.child_module", m.getattr("child_module")?)?;
 
     m.add_wrapped(wrap_pymodule!(parser::parser))?;
     // sys_modules.set_item("hv_csv_transformer.parser.models", m.getattr("parser")?)?;
     sys_modules.set_item("hv_csv_transformer.parser_rs", m.getattr("parser_rs")?)?;
 
+    register_child_module(_py, m)?;
+    sys_modules.set_item("hv_csv_transformer.child_module", m.getattr("child_module")?)?;
     // Inserting to sys.modules allows importing submodules nicely from Python
     // e.g. from maturin_starter.submodule import SubmoduleClass
 
