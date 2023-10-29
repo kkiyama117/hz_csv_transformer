@@ -1,6 +1,6 @@
 [package]
 name = "hv_csv_transformer_rs"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["kkiyama117 <k.kiyama117@gmail.com>"]
 edition = "2021"
 build = "build.rs"
