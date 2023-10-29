@@ -14,6 +14,7 @@ mod build {
 
 mod submodule;
 mod parser;
+mod models;
 
 
 #[pyfunction]
@@ -60,6 +61,8 @@ fn hv_csv_transformer(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pymodule!(parser::parser))?;
     // sys_modules.set_item("hv_csv_transformer.parser.models", m.getattr("parser")?)?;
     sys_modules.set_item("hv_csv_transformer.parser_rs", m.getattr("parser_rs")?)?;
+    m.add_wrapped(wrap_pymodule!(models::module))?;
+    sys_modules.set_item("hv_csv_transformer.models_rs", m.getattr("models_rs")?)?;
 
     register_child_module(_py, m)?;
     sys_modules.set_item("hv_csv_transformer.child_module", m.getattr("child_module")?)?;
