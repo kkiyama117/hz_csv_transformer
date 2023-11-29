@@ -1,7 +1,7 @@
 """PARSER from original CSV file to RAW data structure.
 """
-from .parser import NextIterator
-from .utils import is_real_data
+from hv_csv_transformer.parser.hz7000.parser import NextIterator
+from hv_csv_transformer.parser.hz7000.utils import is_real_data
 
 # from .models import *
 

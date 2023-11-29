@@ -2,7 +2,8 @@ import csv
 import contextlib
 from typing import Iterator
 
-from hv_csv_transformer.models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, FirstPotentialCondition, \
+from hv_csv_transformer.models.csv_structure import FileInfo, MeasureInfo, ConditionInfo, MainMeasureCondition, \
+    FirstPotentialCondition, \
     PostProcessingCondition, NaturePotentialCondition, PGSInfo, CVPhaseInfo, PhaseInfoKind, CycleInfo, SamplingHeader, \
     CVData, AnalysisDataHeader, CSVInfo
 from .models import RowData, BlockData
@@ -16,14 +17,6 @@ def open_csv(filename):
             f, delimiter=",", skipinitialspace=True
         )
         yield NextIterator(csv_reader)
-
-
-def open_csv2(filename):
-    with open(filename, newline='', mode="r") as f:
-        csv_reader = csv.reader(
-            f, delimiter=",", skipinitialspace=True
-        )
-        return NextIterator(csv_reader)
 
 
 class NextIterator:

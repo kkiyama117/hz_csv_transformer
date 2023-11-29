@@ -1,6 +1,6 @@
 import math
 
-from hv_csv_transformer.parser import parser
+from hv_csv_transformer.parser.hz7000 import parser
 from hv_csv_transformer.plotter.cv import create_cv_graph_all
 from hv_csv_transformer.utils import convert_to_utf
 
