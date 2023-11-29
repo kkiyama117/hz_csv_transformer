@@ -5,9 +5,9 @@ from enum import Enum, auto
 from maya import MayaDT
 from polars import DataFrame
 
+from hv_csv_transformer.hv_csv_transformer import models_rs
 
-class CSVInfo(metaclass=ABCMeta):
-    pass
+CSVInfo = models_rs.csv_structure.CSVInfo
 
 
 @dataclass

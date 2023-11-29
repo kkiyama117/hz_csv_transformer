@@ -1,0 +1,24 @@
+[package]
+name = "hv_csv_transformer_rs"
+version = "0.1.5"
+authors = ["kkiyama117 <k.kiyama117@gmail.com>"]
+edition = "2021"
+build = "build.rs"
+
+[lib]
+name = "hv_csv_transformer"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.20.0", features = ["extension-module"] } #features = ["auto-initialize"]
+pyo3-built = { version = "0.4", optional = true }
+
+[features]
+build_info = ["dep:pyo3-built", "dep:built"]
+default = [
+    "build_info"
+]
+
+
+[build-dependencies]
+built = { version = "0.7.1", features = ["chrono", "cargo-lock", "git2"], optional = true }
