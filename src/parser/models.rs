@@ -3,9 +3,8 @@ use pyo3::types::PyList;
 
 
 // https://pyo3.rs/v0.20.0/module#python-submodules
-#[pymodule]
-#[pyo3(name = "models")]
-pub fn module(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+#[pymodule(name = "models")]
+pub fn module(m: &Bound<'_,PyModule>) -> PyResult<()> {
     m.add_class::<RowData>()?;
     m.add_class::<BlockData>()?;
     Ok(())
@@ -20,24 +19,22 @@ struct RowData {
     count: i32,
 }
 
-impl ToPyObject for RowData {
-    fn to_object(&self, py: Python<'_>) -> PyObject {
-        self.clone().into_py(py)
-    }
-}
+// impl IntoPyObject<'_> for RowData {
+//     type Target = ();
+//     type Output = PyObject;
+//     type Error = ();
+//
+//     fn into_pyobject(self, py: Python<'_>) -> Result<Self::Output, Self::Error> {
+//         Ok(self.clone().into_py(py))
+//     }
+// }
 
 #[pymethods]
 impl RowData {
     #[new]
     pub fn __new__(title: String, japanese: String, start: Option<i32>, count: Option<i32>) -> Self {
-        let _start = match start {
-            None => 2,
-            Some(x) => x
-        };
-        let _count = match count {
-            None => 1,
-            Some(x) => x
-        };
+        let _start = start.unwrap_or_else(|| 2);
+        let _count = count.unwrap_or_else(|| 1);
         RowData {
             title,
             japanese,
@@ -96,10 +93,7 @@ struct BlockData {
 impl BlockData {
     #[new]
     pub fn __new__(title: String, rows: &PyList, start: Option<i32>) -> PyResult<Self> {
-        let _start = match start {
-            None => 1,
-            Some(x) => x
-        };
+        let _start = start.unwrap_or_else(|| 1);
         let _rows = rows.extract::<Vec<RowData>>()?;
         Ok(BlockData {
             title,
@@ -127,9 +121,10 @@ impl BlockData {
     }
 
     #[getter]
-    fn get_rows<'p>(&self, py: Python<'p>) -> PyResult<&'p PyList> {
-        Ok(PyList::new(py, &self.rows))
+    fn get_rows<'p>(&self, py: Python<'p>) -> PyResult<Bound<'p,PyList>> {
+        PyList::new(py, &self.rows)
     }
+
     #[setter]
     fn set_rows(&mut self, value: &PyList) -> PyResult<()> {
         self.rows = value.extract::<Vec<RowData>>()?;

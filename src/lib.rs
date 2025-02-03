@@ -1,6 +1,5 @@
 use pyo3::prelude::*;
 use pyo3::wrap_pymodule;
-use pyo3::types::PyDict;
 
 #[cfg(feature = "build_info")]
 #[macro_use]
@@ -38,39 +37,38 @@ impl ExampleClass {
 }
 
 
-fn register_child_module(_py: Python<'_>, parent_module: &PyModule) -> PyResult<()> {
-    let child_module = PyModule::new(_py, "child_module")?;
-    child_module.add_function(wrap_pyfunction!(sum_as_string,child_module)?)?;
-    parent_module.add_submodule(child_module)?;
+fn register_child_module(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
+    let child_module = PyModule::new(parent_module.py(), "child_module")?;
+    child_module.add_function(wrap_pyfunction!(sum_as_string,&child_module)?)?;
+    parent_module.add_submodule(&child_module)?;
     Ok(())
 }
 
 #[pymodule]
-fn hv_csv_transformer(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    let sys_modules: &PyDict = PyModule::import(_py, "sys")?.getattr("modules")?.downcast()?;
-
+fn hv_csv_transformer(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<ExampleClass>()?;
-    sys_modules.set_item("hv_csv_transformer.ExampleClass", m.getattr("ExampleClass")?)?;
+    // sys_modules.set_item("hv_csv_transformer.ExampleClass", m.getattr("ExampleClass")?)?;
 
     m.add_function(wrap_pyfunction!(sum_as_string,m)?)?;
 
     m.add_wrapped(wrap_pymodule!(submodule::submodule))?;
-    sys_modules.set_item("hv_csv_transformer.submodule", m.getattr("submodule")?)?;
+    // sys_modules.set_item("hv_csv_transformer.submodule", m.getattr("submodule")?)?;
 
 
     m.add_wrapped(wrap_pymodule!(parser::parser))?;
     // sys_modules.set_item("hv_csv_transformer.parser.models", m.getattr("parser")?)?;
-    sys_modules.set_item("hv_csv_transformer.parser_rs", m.getattr("parser_rs")?)?;
+    // sys_modules.set_item("hv_csv_transformer.parser_rs", m.getattr("parser_rs")?)?;
     m.add_wrapped(wrap_pymodule!(models::module))?;
-    sys_modules.set_item("hv_csv_transformer.models_rs", m.getattr("models_rs")?)?;
+    // sys_modules.set_item("hv_csv_transformer.models_rs", m.getattr("models_rs")?)?;
 
-    register_child_module(_py, m)?;
-    sys_modules.set_item("hv_csv_transformer.child_module", m.getattr("child_module")?)?;
+    register_child_module(m)?;
+    // sys_modules.set_item("hv_csv_transformer.child_module", m.getattr("child_module")?)?;
     // Inserting to sys.modules allows importing submodules nicely from Python
     // e.g. from maturin_starter.submodule import SubmoduleClass
 
 
     // Build info
+    let _py = m.py();
     #[cfg(feature = "build_info")]
     m.add(
         "_build_info_",

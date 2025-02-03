@@ -1,9 +1,8 @@
 use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 
-#[pymodule]
-#[pyo3(name = "csv_structure")]
-pub fn module(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+#[pymodule(name = "csv_structure")]
+pub fn module(m: &Bound<'_,PyModule>) -> PyResult<()> {
     m.add_class::<CSVInfo>()?;
     Ok(())
 }
